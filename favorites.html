@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Favorites – VelvetZone</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .favorites-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #18141d;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      padding: 32px 24px;
+      min-height: 300px;
+    }
+    .favorites-title {
+      color: #fff;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .favorites-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .favorite-card {
+      background: #29223a;
+      color: #fff;
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(225,0,161,0.07);
+    }
+    .favorite-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .favorite-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e100a1;
+      background: #222;
+    }
+    .favorite-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .remove-favorite {
+      background: none;
+      border: none;
+      color: #e100a1;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .remove-favorite:hover {
+      color: #fff;
+    }
+    .no-favorites {
+      color: #bdbdbd;
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="favorites-container">
+    <div class="favorites-title">My Favorites</div>
+    <div class="favorites-list" id="favoritesList"></div>
+    <div class="no-favorites" id="noFavorites" style="display:none;">
+      You have no favorites yet.
+    </div>
+  </div>
+  <script>
+    // Example favorites data (replace with real data from backend or localStorage)
+    const favorites = [
+      {
+        id: 1,
+        name: "Jane Doe",
+        avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+        info: "Premium Provider"
+      },
+      {
+        id: 2,
+        name: "Mary Smith",
+        avatar: "https://randomuser.me/api/portraits/women/65.jpg",
+        info: "Verified Provider"
+      }
+    ];
+
+    const favoritesList = document.getElementById('favoritesList');
+    const noFavorites = document.getElementById('noFavorites');
+
+    function renderFavorites() {
+      favoritesList.innerHTML = '';
+      if (favorites.length === 0) {
+        noFavorites.style.display = 'block';
+        return;
+      }
+      noFavorites.style.display = 'none';
+      favorites.forEach(fav => {
+        const card = document.createElement('div');
+        card.className = 'favorite-card';
+        card.innerHTML = `
+          <div class="favorite-info">
+            <img src="${fav.avatar}" alt="${fav.name}" class="favorite-avatar">
+            <div>
+              <div class="favorite-name">${fav.name}</div>
+              <div class="favorite-meta">${fav.info}</div>
+            </div>
+          </div>
+          <button class="remove-favorite" onclick="removeFavorite(${fav.id})" title="Remove from favorites">
+            <i class="fa fa-heart-broken"></i> Remove
+          </button>
+        `;
+        favoritesList.appendChild(card);
+      });
+    }
+
+    window.removeFavorite = function(id) {
+      const idx = favorites.findIndex(f => f.id === id);
+      if (idx !== -1) {
+        favorites.splice(idx, 1);
+        renderFavorites();
+      }
+    };
+
+    renderFavorites();
+  </script>
+  <link rel="stylesheet" href

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrade – VelvetZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="velvet">Velvet</span>Zone
+        <span class="blockchain-badge">BLOCKCHAIN SECURED</span>
+      </a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="browse.html">Browse</a>
+        <div class="auth-buttons">
+          <a href="dashboard.html" class="btn btn-outline">My Account</a>
+        </div>
+      </div>
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="upgrade-container">
+    <div class="container">
+      <div class="upgrade-header">
+        <h1><i class="fas fa-crown"></i> Upgrade Your Account</h1>
+        <p>Unlock premium features to maximize your earnings</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3>Basic</h3>
+            <div class="price">Free</div>
+          </div>
+          <ul class="features-list">
+            <li><i class="fas fa-check"></i> Standard Profile</li>
+            <li><i class="fas fa-check"></i> Basic Search Visibility</li>
+            <li><i class="fas fa-check"></i> Messaging</li>
+            <li><i class="fas fa-times"></i> No Verification Badge</li>
+            <li><i class="fas fa-times"></i> Limited Photo Uploads</li>
+          </ul>
+          <div class="pricing-footer">
+            <a href="dashboard.html" class="btn btn-outline">Current Plan</a>
+          </div>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="pricing-header">
+            <div class="popular-badge">Most Popular</div>
+            <h3>Premium</h3>
+            <div class="price">₵200<span>/month</span></div>
+          </div>
+          <ul class="features-list">
+            <li><i class="fas fa-check"></i> Verified Badge</li>
+            <li><i class="fas fa-check"></i> Top Search Results</li>
+            <li><i class="fas fa-check"></i> Unlimited Photo Uploads</li>
+            <li><i class="fas fa-check"></i> Priority Customer Support</li>
+            <li><i class="fas fa-check"></i> Featured in Weekly Newsletter</li>
+          </ul>
+          <div class="pricing-footer">
+            <button class="btn btn-gradient" id="premiumBtn">Upgrade Now</button>
+          </div>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <h3>VIP</h3>
+            <div class="price">₵500<span>/month</span></div>
+          </div>
+          <ul class="features-list">
+            <li><i class="fas fa-check"></i> All Premium Features</li>
+            <li><i class="fas fa-check"></i> Homepage Spotlight</li>
+            <li><i class="fas fa-check"></i> Social Media Promotion</li>
+            <li><i class="fas fa-check"></i> Dedicated Account Manager</li>
+            <li><i class="fas fa-check"></i> Custom Profile Design</li>
+          </ul>
+          <div class="pricing-footer">
+            <button class="btn btn-outline" id="vipBtn">Contact Us</button>
+          </div>
+        </div>
+      </div>
+
+      <form id="upgradeForm" class="upgrade-form">
+        <h2>Custom Upgrade Request</h2>
+        <p>Need something special? Submit a custom request</p>
+        
+        <div class="form-group">
+          <label>
+            <input type="checkbox" name="verify" value="true">
+            <span>Request Verification Badge (₵100)</span>
+          </label>
+        </div>
+        
+        <div class="form-group">
+          <label>
+            <input type="checkbox" name="topfeed" value="true">
+            <span>Request Top Feed Promotion (₵150/week)</span>
+          </label>
+        </div>
+        
+        <div class="form-group">
+          <label for="notes">Special Requests</label>
+          <textarea id="notes" placeholder="Tell us about any special requests or preferred payment method (Momo, Bank, Crypto, etc.)"></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-gradient">
+          <i class="fas fa-paper-plane"></i> Submit Request
+        </button>
+        <p id="statusMessage" class="status-message"></p>
+      </form>
+    </div>
+  </main>
+
+  <footer class="blockchain-footer">
+    <!-- Same footer as index.html -->
+  </footer>
+
+  <script type="module">
+    import { auth, db } from './js/firebase-config.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const form = document.getElementById("upgradeForm");
+    const status = document.getElementById("statusMessage");
+    const premiumBtn = document.getElementById("premiumBtn");
+    const vipBtn = document.getElementById("vipBtn");
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+      } else {
+        window.location.href = "login.html";
+      }
+    });
+
+    premiumBtn.addEventListener("click", () => {
+      if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+      }
+      document.querySelector('input[name="verify"]').checked = true;
+      document.querySelector('input[name="topfeed"]').checked = true;
+      document.getElementById("notes").value = "I want to upgrade to Premium plan for ₵200/month";
+      form.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    vipBtn.addEventListener("click", () => {
+      if (!currentUser) {
+        window.location.href = "login.html";
+        return;
+      }
+      document.getElementById("notes").value = "I'm interested in VIP plan at ₵500/month. Please contact me with details.";
+      form.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const verify = form.querySelector('input[name="verify"]').checked;
+      const topfeed = form.querySelector('input[name="topfeed"]').checked;
+      const notes = document.getElementById("notes").value;
+
+      if (!verify && !topfeed && !notes) {
+        status.textContent = "Please select at least one upgrade option or enter a request.";
+        status.style.color = "#ff4d4d";
+        return;
+      }
+
+      const upgradeData = {
+        uid: currentUser.uid,
+        verifyRequest: verify,
+        topFeedRequest: topfeed,
+        notes: notes,
+        submittedAt: new Date(),
+        status: "pending"
+      };
+
+      try {
+        await setDoc(doc(db, "upgrade_requests", currentUser.uid), upgradeData);
+        status.textContent = "✅ Upgrade request submitted successfully! We'll contact you soon.";
+        status.style.color = "#4CAF50";
+        form.reset();
+      } catch (err) {
+        console.error(err);
+        status.textContent = "⚠ Error submitting request. Please try again.";
+        status.style.color = "#ff4d4d";
+      }
+    });
+  </script>
+
+  <style>
+    .upgrade-container {
+      padding: 100px 0 60px;
+      min-height: 100vh;
+    }
+
+    .upgrade-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .upgrade-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .upgrade-header p {
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 60px;
+    }
+
+    .pricing-card {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--primary);
+      transform: translateY(-10px);
+    }
+
+    .pricing-card.featured::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 12px 12px 0 0;
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pricing-header h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .price {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .price span {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .features-list {
+      list-style: none;
+      margin-bottom: 30px;
+    }
+
+    .features-list li {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .features-list i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .features-list .fa-check {
+      color: #4CAF50;
+    }
+
+    .features-list .fa-times {
+      color: #ff4d4d;
+    }
+
+    .pricing-footer {
+      text-align: center;
+    }
+
+    .upgrade-form {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .upgrade-form h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .upgrade-form p {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .form-group label:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+    }
+
+    .form-group textarea {
+      width: 100%;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 0.95rem;
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .status-message {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-card.featured {
+        transform: none;
+      }
+    }
+  </style>
+</body>
+</html>

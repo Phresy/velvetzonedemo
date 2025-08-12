@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – VelvetZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b0b0c;
+    }
+    .auth-card {
+      background: rgba(30, 30, 30, 0.8);
+      border-radius: 12px;
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .auth-header h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: white;
+    }
+    .auth-header p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.95rem;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+    }
+    .form-group input:focus {
+      border-color: #e3069d;
+      outline: none;
+    }
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .remember-me {
+      display: flex;
+      align-items: center;
+    }
+    .remember-me input {
+      margin-right: 8px;
+    }
+    .remember-me span {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+    .forgot-password {
+      color: #e3069d;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .btn-block {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+    }
+    .auth-footer {
+      margin-top: 20px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .auth-footer a {
+      color: #e3069d;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .status-message {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .success {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4CAF50;
+    }
+    .error {
+      background: rgba(244, 67, 54, 0.2);
+      color: #F44336;
+    }
+    .login-spinner {
+      display: none;
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Sign in to your VelvetZone account</p>
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="your@email.com" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe">
+            <span>Remember me</span>
+          </label>
+          <a href="forgot-password.html" class="forgot-password">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="btn btn-gradient btn-block" id="loginBtn">
+          <span id="loginText">Sign In</span>
+          <span id="loginSpinner" class="login-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+        </button>
+        
+        <div id="statusMessage" class="status-message" style="display: none;"></div>
+      </form>
+
+      <div class="auth-footer">
+        <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from './js/firebase-config.js';
+    import { signInWithEmailAndPassword, setPersistence, browserSessionPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const loginForm = document.getElementById('loginForm');
+    const statusMsg = document.getElementById('statusMessage');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginText = document.getElementById('loginText');
+    const loginSpinner = document.getElementById('loginSpinner');
+    const rememberMe = document.getElementById('rememberMe');
+
+    // Check for saved email if "Remember me" was checked
+    if (localStorage.getItem('rememberEmail') === 'true') {
+      const savedEmail = localStorage.getItem('savedEmail');
+      if (savedEmail) {
+        document.getElementById('email').value = savedEmail;
+        rememberMe.checked = true;
+      }
+    }
+
+    // Form submission
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const remember = rememberMe.checked;
+
+      // Show loading state
+      loginText.textContent = 'Signing in...';
+      loginSpinner.style.display = 'inline-block';
+      loginBtn.disabled = true;
+
+      try {
+        // Set persistence based on "Remember me" selection
+        const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
+        await setPersistence(auth, persistence);
+
+        // Save email if "Remember me" is checked
+        if (remember) {
+          localStorage.setItem('rememberEmail', 'true');
+          localStorage.setItem('savedEmail', email);
+        } else {
+          localStorage.removeItem('rememberEmail');
+          localStorage.removeItem('savedEmail');
+        }
+
+        // Sign in with email/password
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Get user document from Firestore
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        
+        if (!userDoc.exists()) {
+          throw new Error('User account not found in our system.');
+        }
+
+        const userData = userDoc.data();
+
+        // Check if account is disabled
+        if (userData.status === 'disabled') {
+          throw new Error('This account has been disabled. Please contact support.');
+        }
+
+        // Update last login timestamp
+        await updateDoc(doc(db, "users", user.uid), {
+          lastLogin: new Date()
+        });
+
+        // Store user info in localStorage
+        localStorage.setItem('userRole', userData.role);
+        localStorage.setItem('displayName', userData.displayName || 'User');
+
+        // Show success message
+        showStatus('Login successful! Redirecting...', 'success');
+        
+        // Redirect based on user role
+        setTimeout(() => {
+          if (userData.role === 'provider') {
+            window.location.href = 'dashboard.html';
+          } else {
+            window.location.href = 'browse.html';
+          }
+        }, 1500);
+
+      } catch (error) {
+        console.error('Login error:', error);
+        
+        let errorMessage = 'Login failed. Please try again.';
+        switch(error.code) {
+          case 'auth/user-not-found':
+            errorMessage = 'No account found with this email.';
+            break;
+          case 'auth/wrong-password':
+            errorMessage = 'Incorrect password. Please try again.';
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = 'Too many failed attempts. Account temporarily locked.';
+            break;
+          case 'auth/user-disabled':
+            errorMessage = 'This account has been disabled.';
+            break;
+          default:
+            if (error.message.includes('not found in our system')) {
+              errorMessage = 'Account not found. Please sign up.';
+            }
+        }
+        
+        showStatus(errorMessage, 'error');
+        
+        // Reset loading state
+        loginText.textContent = 'Sign In';
+        loginSpinner.style.display = 'none';
+        loginBtn.disabled = false;
+      }
+    });
+
+    function showStatus(message, type) {
+      statusMsg.textContent = message;
+      statusMsg.className = 'status-message ' + type;
+      statusMsg.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

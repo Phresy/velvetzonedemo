@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VelvetZone – Private Adult Connections</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Add this CSS, preferably in your css/style.css file */
+    .hero-bg-center {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-bg-center::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300px;         /* Adjust width as needed */
+      height: 300px;        /* Adjust height as needed */
+      transform: translate(-50%, -50%);
+      background: url('bg.jpg') no-repeat center center;
+      background-size: contain;
+      opacity: 0.7;         /* Adjust opacity as needed */
+      z-index: 0;
+      pointer-events: none; /* So it doesn't block buttons/links */
+    }
+
+    .hero-bg-center > * {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Blockchain-inspired Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="velvet">Velvet</span>Zone
+        <span class="blockchain-badge">BLOCKCHAIN SECURED</span>
+      </a>
+      <div class="nav-links">
+        <a href="browse.html">Browse</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="upgrade.html">Premium</a>
+        <div class="auth-buttons">
+          <a href="login.html" class="btn btn-outline">Login</a>
+          <a href="signup.html" class="btn">Sign Up</a>
+        </div>
+      </div>
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="container hero-bg-center">
+      <h1>Discreet Adult Connections <span class="blockchain-animation">Powered by Blockchain</span></h1>
+      <p>Your private, secure platform for adult companionship in West Africa</p>
+      <div class="cta">
+        <a href="signup.html" class="btn btn-gradient">Join as Client</a>
+        <a href="signup.html?role=provider" class="btn btn-outline">List as Provider</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2>Why Choose VelvetZone?</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-lock"></i>
+          </div>
+          <h3>End-to-End Encryption</h3>
+          <p>All communications secured with blockchain technology</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Verified Profiles</h3>
+          <p>Strict verification process for all providers</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Instant Matching</h3>
+          <p>Find compatible partners in your area quickly</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <h3>Crypto Payments</h3>
+          <p>Discreet payments with multiple cryptocurrency options</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blockchain Footer -->
+  <footer class="blockchain-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>VelvetZone</h4>
+          <p>Discreet adult connections with blockchain security</p>
+          <div class="crypto-badges">
+            <span><i class="fab fa-bitcoin"></i> Bitcoin</span>
+            <span><i class="fab fa-ethereum"></i> Ethereum</span>
+            <span><i class="fas fa-wallet"></i> USDT</span>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="browse.html">Browse Providers</a></li>
+            <li><a href="dashboard.html">My Dashboard</a></li>
+            <li><a href="upgrade.html">Go Premium</a></li>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="safety.html">Safety Tips</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Blockchain Security</h4>
+          <div class="blockchain-info">
+            <div class="blockchain-status">
+              <div class="status-indicator active"></div>
+              <span>Network Secured</span>
+            </div>
+            <small>All transactions encrypted on the blockchain</small>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 VelvetZone. All rights reserved.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-telegram"></i></a>
+          <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – VelvetZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="velvet">Velvet</span>Zone
+        <span class="blockchain-badge">BLOCKCHAIN SECURED</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <div class="auth-buttons">
+          <a href="login.html" class="btn btn-outline">Login</a>
+          <a href="signup.html" class="btn">Sign Up</a>
+        </div>
+      </div>
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="contact-container">
+    <div class="container">
+      <div class="contact-header">
+        <h1>Contact Us</h1>
+        <p>Have questions or need support? We're here to help.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email Us</h3>
+            <p>support@velvetzone.com</p>
+            <p>business@velvetzone.com</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <h3>Call Us</h3>
+            <p>Ghana: +233 123 456 789</p>
+            <p>Nigeria: +234 123 456 789</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Visit Us</h3>
+            <p>123 Digital Street</p>
+            <p>Accra, Ghana</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h3>Hours</h3>
+            <p>Monday-Friday: 9am - 6pm</p>
+            <p>Saturday: 10am - 4pm</p>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject" required>
+                <option value="">Select a subject</option>
+                <option value="support">Account Support</option>
+                <option value="verification">Verification Help</option>
+                <option value="payment">Payment Issues</option>
+                <option value="safety">Safety Concerns</option>
+                <option value="other">Other Inquiry</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" placeholder="How can we help you?" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-gradient btn-block">Send Message</button>
+            <p id="statusMessage" class="status-message"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="blockchain-footer">
+    <!-- Same footer as index.html -->
+  </footer>
+
+  <script type="module">
+    import { db } from './js/firebase-config.js';
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const form = document.getElementById("contactForm");
+    const statusMsg = document.getElementById("statusMessage");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const subject = document.getElementById("subject").value;
+      const message = document.getElementById("message").value.trim();
+
+      try {
+        await addDoc(collection(db, "contactMessages"), {
+          name,
+          email,
+          subject,
+          message,
+          timestamp: new Date(),
+          status: "new"
+        });
+
+        statusMsg.textContent = "Thank you! Your message has been sent.";
+        statusMsg.style.color = "#4CAF50";
+        form.reset();
+      } catch (error) {
+        console.error("Error sending message:", error);
+        statusMsg.textContent = "Error sending message. Please try again.";
+        statusMsg.style.color = "#F44336";
+      }
+    });
+  </script>
+
+  <style>
+    .contact-container {
+      padding: 100px 0 60px;
+      min-height: 100vh;
+    }
+
+    .contact-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .contact-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .contact-header p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .info-card {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .info-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(227, 6, 157, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      color: var(--primary);
+      font-size: 1.3rem;
+    }
+
+    .info-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .info-card p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 5px;
+      font-size: 0.95rem;
+    }
+
+    .contact-form {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 0.95rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    .btn-block {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+    }
+
+    .status-message {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .contact-header h1 {
+        font-size: 2rem;
+      }
+
+      .contact-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ – VelvetZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="velvet">Velvet</span>Zone
+        <span class="blockchain-badge">BLOCKCHAIN SECURED</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <div class="auth-buttons">
+          <a href="login.html" class="btn btn-outline">Login</a>
+          <a href="signup.html" class="btn">Sign Up</a>
+        </div>
+      </div>
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="faq-container">
+    <div class="container">
+      <div class="faq-header">
+        <h1>Frequently Asked Questions</h1>
+        <p>Find answers to common questions about VelvetZone</p>
+      </div>
+
+      <div class="faq-search">
+        <input type="text" placeholder="Search FAQs...">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+
+      <div class="faq-categories">
+        <button class="category-btn active" data-category="all">All Questions</button>
+        <button class="category-btn" data-category="account">Account</button>
+        <button class="category-btn" data-category="safety">Safety</button>
+        <button class="category-btn" data-category="payments">Payments</button>
+        <button class="category-btn" data-category="providers">For Providers</button>
+      </div>
+
+      <div class="faq-accordion">
+        <!-- Account Questions -->
+        <div class="faq-item" data-category="account">
+          <button class="faq-question">
+            <span>How do I create an account?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>To create an account:</p>
+            <ol>
+              <li>Click on "Sign Up" in the top navigation</li>
+              <li>Choose whether you're signing up as a client or provider</li>
+              <li>Fill in your details including email and password</li>
+              <li>Verify your email address by clicking the link we send you</li>
+              <li>Complete your profile setup</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="account">
+          <button class="faq-question">
+            <span>How do I reset my password?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>If you've forgotten your password:</p>
+            <ol>
+              <li>Go to the login page and click "Forgot password"</li>
+              <li>Enter the email address associated with your account</li>
+              <li>Check your email for a password reset link</li>
+              <li>Click the link and follow the instructions to set a new password</li>
+            </ol>
+            <p>If you don't receive the email, check your spam folder or contact support.</p>
+          </div>
+        </div>
+
+        <!-- Safety Questions -->
+        <div class="faq-item" data-category="safety">
+          <button class="faq-question">
+            <span>How does VelvetZone ensure user safety?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We take several measures to ensure user safety:</p>
+            <ul>
+              <li><strong>Identity Verification:</strong> All providers must complete identity verification</li>
+              <li><strong>Blockchain Security:</strong> All communications are encrypted and secured with blockchain technology</li>
+              <li><strong>Review System:</strong> Clients can rate and review providers after meetings</li>
+              <li><strong>Reporting Tools:</strong> Easy-to-use reporting for any suspicious activity</li>
+              <li><strong>Safety Tips:</strong> We provide comprehensive safety guidelines for all users</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Payment Questions -->
+        <div class="faq-item" data-category="payments">
+          <button class="faq-question">
+            <span>What payment methods do you accept?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We accept various payment methods including:</p>
+            <ul>
+              <li>Mobile Money (MTN, Vodafone, AirtelTigo)</li>
+              <li>Credit/Debit Cards (Visa, Mastercard)</li>
+              <li>Bank Transfers</li>
+              <li>Cryptocurrencies (Bitcoin, Ethereum, USDT)</li>
+            </ul>
+            <p>All transactions are secured with end-to-end encryption.</p>
+          </div>
+        </div>
+
+        <!-- Provider Questions -->
+        <div class="faq-item" data-category="providers">
+          <button class="faq-question">
+            <span>How do I become a verified provider?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>To become a verified provider:</p>
+            <ol>
+              <li>Sign up as a provider and complete your profile</li>
+              <li>Submit your ID and additional verification documents</li>
+              <li>Complete the verification interview (video call)</li>
+              <li>Wait for our team to review your application (1-3 business days)</li>
+              <li>Once approved, you'll receive a verified badge on your profile</li>
+            </ol>
+            <p>Verification helps build trust with potential clients.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-support">
+        <h2>Still need help?</h2>
+        <p>Can't find the answer you're looking for? Our support team is ready to help.</p>
+        <a href="contact.html" class="btn btn-gradient">Contact Support</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="blockchain-footer">
+    <!-- Same footer as index.html -->
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // FAQ accordion functionality
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      
+      faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+          const item = question.parentElement;
+          const answer = question.nextElementSibling;
+          const icon = question.querySelector('i');
+          
+          // Toggle this item
+          item.classList.toggle('active');
+          
+          // Toggle icon
+          if (item.classList.contains('active')) {
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+          } else {
+            answer.style.maxHeight = '0';
+            icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+          }
+          
+          // Close other items
+          faqQuestions.forEach(otherQuestion => {
+            if (otherQuestion !== question) {
+              const otherItem = otherQuestion.parentElement;
+              const otherAnswer = otherQuestion.nextElementSibling;
+              const otherIcon = otherQuestion.querySelector('i');
+              
+              otherItem.classList.remove('active');
+              otherAnswer.style.maxHeight = '0';
+              otherIcon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+            }
+          });
+        });
+      });
+      
+      // FAQ category filtering
+      const categoryBtns = document.querySelectorAll('.category-btn');
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const category = btn.dataset.category;
+          
+          // Update active button
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          
+          // Filter items
+          faqItems.forEach(item => {
+            if (category === 'all' || item.dataset.category === category) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        });
+      });
+      
+      // FAQ search functionality
+      const faqSearch = document.querySelector('.faq-search input');
+      faqSearch.addEventListener('input', () => {
+        const searchTerm = faqSearch.value.toLowerCase();
+        
+        faqItems.forEach(item => {
+          const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+          const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+          
+          if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .faq-container {
+      padding: 100px 0 60px;
+      min-height: 100vh;
+    }
+
+    .faq-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .faq-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .faq-header p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+    }
+
+    .faq-search {
+      display: flex;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    .faq-search input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px 0 0 6px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .faq-search button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 20px;
+      border-radius: 0 6px 6px 0;
+      cursor: pointer;
+    }
+
+    .faq-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .category-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: rgba(255, 255, 255, 0.8);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .category-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .category-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .faq-accordion {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 20px;
+      text-align: left;
+      background: none;
+      border: none;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+    }
+
+    .faq-question i {
+      transition: transform 0.3s;
+    }
+
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      padding: 0 20px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .faq-item.active .faq-answer {
+      padding: 0 20px 20px;
+    }
+
+    .faq-answer p, .faq-answer ol, .faq-answer ul {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .faq-answer ol, .faq-answer ul {
+      padding-left: 20px;
+    }
+
+    .faq-answer li {
+      margin-bottom: 8px;
+    }
+
+    .faq-support {
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .faq-support h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+
+    .faq-support p {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .faq-header h1 {
+        font-size: 2rem;
+      }
+
+      .faq-question {
+        font-size: 1rem;
+        padding: 15px;
+      }
+    }
+  </style>
+</body>
+</html>

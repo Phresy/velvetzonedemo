@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safety Tips – VelvetZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="velvet">Velvet</span>Zone
+        <span class="blockchain-badge">BLOCKCHAIN SECURED</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="browse.html">Browse</a>
+        <div class="auth-buttons">
+          <a href="login.html" class="btn btn-outline">Login</a>
+          <a href="signup.html" class="btn">Sign Up</a>
+        </div>
+      </div>
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="safety-container">
+    <div class="container">
+      <div class="safety-header">
+        <h1>Safety Tips</h1>
+        <p>Your security is our top priority. Follow these guidelines to ensure safe experiences.</p>
+      </div>
+
+      <div class="safety-grid">
+        <div class="safety-card">
+          <div class="safety-icon">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <h3>Identity Verification</h3>
+          <ul>
+            <li>Always verify your provider's identity through our platform</li>
+            <li>Look for the verified badge on profiles</li>
+            <li>Never share personal identification documents outside our secure system</li>
+          </ul>
+        </div>
+
+        <div class="safety-card">
+          <div class="safety-icon">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3>Communication</h3>
+          <ul>
+            <li>Keep all communication on our platform until you establish trust</li>
+            <li>Be wary of anyone trying to move conversations to other apps immediately</li>
+            <li>Report any suspicious messages to our support team</li>
+          </ul>
+        </div>
+
+        <div class="safety-card">
+          <div class="safety-icon">
+            <i class="fas fa-hand-holding-usd"></i>
+          </div>
+          <h3>Payments</h3>
+          <ul>
+            <li>Only use our secure payment system - never pay directly</li>
+            <li>Avoid providers who request payment through unofficial channels</li>
+            <li>All transactions are protected by blockchain technology</li>
+          </ul>
+        </div>
+
+        <div class="safety-card">
+          <div class="safety-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <h3>Meetups</h3>
+          <ul>
+            <li>Always meet in public places first</li>
+            <li>Inform a friend about your plans and share your location</li>
+            <li>Trust your instincts - if something feels wrong, leave</li>
+          </ul>
+        </div>
+
+        <div class="safety-card">
+          <div class="safety-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h3>Red Flags</h3>
+          <ul>
+            <li>Requests for financial help or loans</li>
+            <li>Pressure to move communication off-platform quickly</li>
+            <li>Inconsistent information or stories</li>
+            <li>Refusal to verify identity through our system</li>
+          </ul>
+        </div>
+
+        <div class="safety-card">
+          <div class="safety-icon">
+            <i class="fas fa-flag"></i>
+          </div>
+          <h3>Reporting</h3>
+          <ul>
+            <li>Report any suspicious behavior immediately</li>
+            <li>Use our emergency contact if you feel unsafe</li>
+            <li>Block users who make you uncomfortable</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="emergency-contact">
+        <h2>Emergency Contact</h2>
+        <p>If you feel unsafe or need immediate assistance:</p>
+        <div class="emergency-numbers">
+          <div>
+            <h4>Ghana Police</h4>
+            <p><i class="fas fa-phone"></i> 191 or 18555</p>
+          </div>
+          <div>
+            <h4>VelvetZone Support</h4>
+            <p><i class="fas fa-phone"></i> +233 123 456 789 (24/7)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="blockchain-footer">
+    <!-- Same footer as index.html -->
+  </footer>
+
+  <style>
+    .safety-container {
+      padding: 100px 0 60px;
+      min-height: 100vh;
+    }
+
+    .safety-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .safety-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .safety-header p {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .safety-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .safety-card {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .safety-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
+    .safety-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(227, 6, 157, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+
+    .safety-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .safety-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .safety-card li {
+      margin-bottom: 10px;
+      padding-left: 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .safety-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    .emergency-contact {
+      background: rgba(244, 67, 54, 0.1);
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      border: 1px solid rgba(244, 67, 54, 0.3);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .emergency-contact h2 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      color: #F44336;
+    }
+
+    .emergency-contact p {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+    }
+
+    .emergency-numbers {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .emergency-numbers div {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px 25px;
+      border-radius: 8px;
+    }
+
+    .emergency-numbers h4 {
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    .emergency-numbers p {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .safety-header h1 {
+        font-size: 2rem;
+      }
+
+      .safety-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .emergency-numbers {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</body>
+</html>

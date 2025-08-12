@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile – VelvetZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="velvet">Velvet</span>Zone
+        <span class="blockchain-badge">BLOCKCHAIN SECURED</span>
+      </a>
+      <div class="nav-links">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="browse.html">Browse</a>
+        <a href="upgrade.html">Premium</a>
+        <div class="auth-buttons">
+          <a href="dashboard.html" class="btn btn-outline">My Account</a>
+        </div>
+      </div>
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="edit-profile-container">
+    <div class="container">
+      <div class="edit-profile-header">
+        <h1>Edit Your Profile</h1>
+        <p>Update your information to attract more clients</p>
+      </div>
+
+      <form id="profileForm" class="edit-profile-form">
+        <div class="form-section">
+          <h2>Basic Information</h2>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Display Name</label>
+              <input type="text" id="name" placeholder="Your professional name" required>
+            </div>
+            <div class="form-group">
+              <label for="country">Country</label>
+              <select id="country" required>
+                <option value="">Select Country</option>
+                <option value="Ghana">Ghana</option>
+                <option value="Nigeria">Nigeria</option>
+                <option value="Kenya">Kenya</option>
+                <option value="South Africa">South Africa</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" id="city" placeholder="Your city" required>
+            </div>
+            <div class="form-group">
+              <label for="gender">Gender</label>
+              <select id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Trans">Trans</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="orientation">Orientation</label>
+              <select id="orientation" required>
+                <option value="">Select Orientation</option>
+                <option value="Straight">Straight</option>
+                <option value="Lesbian">Lesbian</option>
+                <option value="Gay">Gay</option>
+                <option value="Bisexual">Bisexual</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Profile Details</h2>
+          <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea id="bio" placeholder="Tell clients about yourself and what you offer..." required></textarea>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Profile Image</h2>
+          <div class="image-upload">
+            <div class="image-preview" id="imagePreview">
+              <p>No image selected</p>
+            </div>
+            <div class="upload-controls">
+              <input type="file" id="profileImage" accept="image/*" hidden>
+              <label for="profileImage" class="btn btn-outline">
+                <i class="fas fa-camera"></i> Choose Image
+              </label>
+              <button type="button" id="uploadBtn" class="btn">
+                <i class="fas fa-cloud-upload-alt"></i> Upload
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Services (Optional)</h2>
+          <div id="servicesContainer">
+            <!-- Services will be added here -->
+          </div>
+          <button type="button" id="addServiceBtn" class="btn btn-outline">
+            <i class="fas fa-plus"></i> Add Service
+          </button>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-gradient">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+          <p id="statusMessage" class="status-message"></p>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="blockchain-footer">
+    <!-- Same footer as index.html -->
+  </footer>
+
+  <script type="module">
+    import { db, auth } from './js/firebase-config.js';
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const auth = getAuth();
+    let uploadedImageUrl = "";
+    const statusMsg = document.getElementById("statusMessage");
+    let serviceCount = 0;
+
+    // Form elements
+    const nameInput = document.getElementById("name");
+    const countrySelect = document.getElementById("country");
+    const cityInput = document.getElementById("city");
+    const genderSelect = document.getElementById("gender");
+    const orientationSelect = document.getElementById("orientation");
+    const bioInput = document.getElementById("bio");
+    const imagePreview = document.getElementById("imagePreview");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const servicesContainer = document.getElementById("servicesContainer");
+    const addServiceBtn = document.getElementById("addServiceBtn");
+
+    // Add service functionality
+    addServiceBtn.addEventListener("click", () => {
+      serviceCount++;
+      const serviceId = `service-${serviceCount}`;
+      const serviceHtml = `
+        <div class="service-entry" id="${serviceId}">
+          <div class="service-header">
+            <h3>Service #${serviceCount}</h3>
+            <button type="button" class="remove-service" data-service="${serviceId}">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="${serviceId}-name">Service Name</label>
+              <input type="text" id="${serviceId}-name" placeholder="Service name">
+            </div>
+            <div class="form-group">
+              <label for="${serviceId}-price">Price</label>
+              <input type="text" id="${serviceId}-price" placeholder="Price or rate">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="${serviceId}-desc">Description</label>
+            <textarea id="${serviceId}-desc" placeholder="Service description"></textarea>
+          </div>
+        </div>
+      `;
+      servicesContainer.insertAdjacentHTML('beforeend', serviceHtml);
+    });
+
+    // Remove service functionality
+    servicesContainer.addEventListener("click", (e) => {
+      if (e.target.classList.contains('remove-service') || e.target.closest('.remove-service')) {
+        const serviceId = e.target.closest('.remove-service').dataset.service;
+        document.getElementById(serviceId).remove();
+      }
+    });
+
+    // Image upload preview
+    document.getElementById("profileImage").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          imagePreview.innerHTML = `
+            <img src="${event.target.result}" alt="Preview">
+            <p>Ready to upload</p>
+          `;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Upload image to Cloudinary
+    uploadBtn.addEventListener("click", async () => {
+      const file = document.getElementById("profileImage").files[0];
+      if (!file) {
+        statusMsg.textContent = "Please select an image first.";
+        statusMsg.style.color = "#ff4d4d";
+        return;
+      }
+
+      try {
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+        
+        // In a real app, you would upload to Cloudinary or similar
+        // For demo, we'll just use a mock URL
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        uploadedImageUrl = URL.createObjectURL(file);
+        
+        imagePreview.innerHTML = `
+          <img src="${uploadedImageUrl}" alt="Uploaded">
+          <p>Image uploaded successfully</p>
+        `;
+        statusMsg.textContent = "";
+      } catch (err) {
+        console.error("Upload failed:", err);
+        statusMsg.textContent = "Image upload failed. Please try again.";
+        statusMsg.style.color = "#ff4d4d";
+      } finally {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Upload';
+      }
+    });
+
+    // Load existing profile data
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const providerRef = doc(db, "providers", user.uid);
+      const docSnap = await getDoc(providerRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        nameInput.value = data.name || "";
+        countrySelect.value = data.country || "";
+        cityInput.value = data.city || "";
+        genderSelect.value = data.gender || "";
+        orientationSelect.value = data.orientation || "";
+        bioInput.value = data.bio || "";
+        uploadedImageUrl = data.profileImage || "";
+
+        if (uploadedImageUrl) {
+          imagePreview.innerHTML = `
+            <img src="${uploadedImageUrl}" alt="Current Profile">
+            <p>Current profile image</p>
+          `;
+        }
+
+        // Load services if they exist
+        if (data.services && data.services.length > 0) {
+          data.services.forEach((service, index) => {
+            serviceCount++;
+            const serviceId = `service-${serviceCount}`;
+            servicesContainer.insertAdjacentHTML('beforeend', `
+              <div class="service-entry" id="${serviceId}">
+                <div class="service-header">
+                  <h3>Service #${serviceCount}</h3>
+                  <button type="button" class="remove-service" data-service="${serviceId}">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="${serviceId}-name">Service Name</label>
+                    <input type="text" id="${serviceId}-name" value="${service.name || ''}" placeholder="Service name">
+                  </div>
+                  <div class="form-group">
+                    <label for="${serviceId}-price">Price</label>
+                    <input type="text" id="${serviceId}-price" value="${service.price || ''}" placeholder="Price or rate">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="${serviceId}-desc">Description</label>
+                  <textarea id="${serviceId}-desc" placeholder="Service description">${service.description || ''}</textarea>
+                </div>
+              </div>
+            `);
+          });
+        }
+      }
+    });
+
+    // Save profile
+    document.getElementById("profileForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      if (!uploadedImageUrl) {
+        statusMsg.textContent = "Please upload a profile image.";
+        statusMsg.style.color = "#ff4d4d";
+        return;
+      }
+
+      const user = auth.currentUser;
+      if (!user) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      // Collect services data
+      const services = [];
+      const serviceElements = document.querySelectorAll('.service-entry');
+      serviceElements.forEach(serviceEl => {
+        const id = serviceEl.id;
+        services.push({
+          name: document.getElementById(`${id}-name`)?.value || '',
+          price: document.getElementById(`${id}-price`)?.value || '',
+          description: document.getElementById(`${id}-desc`)?.value || ''
+        });
+      });
+
+      try {
+        const providerRef = doc(db, "providers", user.uid);
+        await setDoc(providerRef, {
+          uid: user.uid,
+          name: nameInput.value.trim(),
+          country: countrySelect.value,
+          city: cityInput.value.trim(),
+          gender: genderSelect.value,
+          orientation: orientationSelect.value,
+          bio: bioInput.value.trim(),
+          profileImage: uploadedImageUrl,
+          services: services,
+          updatedAt: new Date()
+        }, { merge: true });
+
+        statusMsg.textContent = "Profile updated successfully! Redirecting...";
+        statusMsg.style.color = "#4CAF50";
+        
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1500);
+      } catch (err) {
+        console.error("Save failed:", err);
+        statusMsg.textContent = "Failed to save: " + err.message;
+        statusMsg.style.color = "#ff4d4d";
+      }
+    });
+  </script>
+
+  <style>
+    .edit-profile-container {
+      padding: 100px 0 60px;
+      min-height: 100vh;
+    }
+
+    .edit-profile-header {
+      margin-bottom: 40px;
+    }
+
+    .edit-profile-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .edit-profile-header p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .edit-profile-form {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-section {
+      margin-bottom: 40px;
+    }
+
+    .form-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .form-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 0.95rem;
+    }
+
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .image-upload {
+      margin-top: 20px;
+    }
+
+    .image-preview {
+      width: 100%;
+      max-width: 300px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      overflow: hidden;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-preview p {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .upload-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .service-entry {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .service-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .service-header h3 {
+      font-size: 1.1rem;
+      color: white;
+    }
+
+    .remove-service {
+      background: none;
+      border: none;
+      color: #ff4d4d;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .form-actions {
+      margin-top: 40px;
+    }
+
+    .status-message {
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .edit-profile-form {
+        padding: 20px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .upload-controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</body>
+</html>

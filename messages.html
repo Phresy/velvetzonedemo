@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Messages – VelvetZone</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .chat-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #18141d;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      padding: 24px 18px 18px 18px;
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+    .messages-list {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .message {
+      background: #29223a;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 16px;
+      max-width: 75%;
+      align-self: flex-end;
+      word-break: break-word;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(225,0,161,0.07);
+    }
+    .message.received {
+      background: #222;
+      align-self: flex-start;
+    }
+    .chat-form {
+      display: flex;
+      gap: 8px;
+    }
+    .chat-form input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #29223a;
+      background: #18141d;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    .chat-form button {
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(90deg, #e100a1 0%, #7f00ff 100%);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .chat-form button:hover {
+      background: linear-gradient(90deg, #7f00ff 0%, #e100a1 100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="messages-list" id="messagesList"></div>
+    <form class="chat-form" id="chatForm" autocomplete="off">
+      <input type="text" id="messageInput" placeholder="Type your message..." required>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+  <script>
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = document.getElementById('messageInput');
+    const messagesList = document.getElementById('messagesList');
+
+    // Example: Add a received message (for demo)
+    function addMessage(text, received = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message' + (received ? ' received' : '');
+      msgDiv.textContent = text;
+      messagesList.appendChild(msgDiv);
+      messagesList.scrollTop = messagesList.scrollHeight;
+    }
+
+    chatForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (text) {
+        addMessage(text, false); // Sent message
+        messageInput.value = '';
+        // Simulate a reply after 1s (for demo)
+        setTimeout(() => addMessage("Received: " + text, true), 1000);
+      }
+    });
+  </script>
+</body>
+</html>

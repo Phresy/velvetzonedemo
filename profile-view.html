@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Profile – VelvetZone</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="velvet">Velvet</span>Zone
+        <span class="blockchain-badge">BLOCKCHAIN SECURED</span>
+      </a>
+      <div class="nav-links">
+        <a href="browse.html">Browse</a>
+        <a href="dashboard.html">Dashboard</a>
+        <div class="auth-buttons">
+          <a href="login.html" class="btn btn-outline">Login</a>
+          <a href="signup.html" class="btn">Sign Up</a>
+        </div>
+      </div>
+      <button class="hamburger">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="profile-view-container">
+    <div class="container">
+      <a href="browse.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Browse</a>
+      
+      <div class="profile-view">
+        <div class="profile-header">
+          <div class="profile-image">
+            <img id="providerImage" src="default.jpg" alt="Provider">
+            <div id="verifiedBadge" class="verified-badge hidden">
+              <i class="fas fa-check-circle"></i> Verified
+            </div>
+          </div>
+          <div class="profile-meta">
+            <h1 id="providerNameDetail">Loading...</h1>
+            <div class="location">
+              <i class="fas fa-map-marker-alt"></i>
+              <span id="providerLocation">Unknown location</span>
+            </div>
+            <div class="stats">
+              <div class="stat">
+                <i class="fas fa-user"></i>
+                <span id="providerGender">Not specified</span>
+              </div>
+              <div class="stat">
+                <i class="fas fa-heart"></i>
+                <span id="providerOrientation">Not specified</span>
+              </div>
+            </div>
+            <button id="messageBtn" class="btn btn-gradient">
+              <i class="fas fa-comment-dots"></i> Message Now
+            </button>
+          </div>
+        </div>
+
+        <div class="profile-content">
+          <div class="profile-section">
+            <h2>About</h2>
+            <p id="providerBio">No biography provided.</p>
+          </div>
+
+          <div class="profile-section">
+            <h2>Services</h2>
+            <div id="servicesList" class="services-grid">
+              <!-- Will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="blockchain-footer">
+    <!-- Same footer as index.html -->
+  </footer>
+
+  <script type="module">
+    import { db, auth } from './js/firebase-config.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const providerId = params.get("id");
+
+    if (!providerId) {
+      window.location.href = "browse.html";
+    }
+
+    async function loadProvider() {
+      try {
+        const providerRef = doc(db, "providers", providerId);
+        const providerSnap = await getDoc(providerRef);
+
+        if (!providerSnap.exists()) {
+          alert("Provider not found");
+          window.location.href = "browse.html";
+          return;
+        }
+
+        const data = providerSnap.data();
+        
+        // Update DOM elements
+        document.getElementById("providerNameDetail").textContent = data.name || "Unnamed Provider";
+        document.getElementById("providerImage").src = data.profileImage || "default.jpg";
+        document.getElementById("providerLocation").textContent = `${data.city || 'Unknown'}, ${data.country || 'Unknown'}`;
+        document.getElementById("providerGender").textContent = data.gender || "Not specified";
+        document.getElementById("providerOrientation").textContent = data.orientation || "Not specified";
+        document.getElementById("providerBio").textContent = data.bio || "No biography provided.";
+        
+        if (data.verified) {
+          document.getElementById("verifiedBadge").classList.remove("hidden");
+        }
+
+        // Load services if available
+        if (data.services && data.services.length > 0) {
+          const servicesList = document.getElementById("servicesList");
+          servicesList.innerHTML = data.services.map(service => `
+            <div class="service-card">
+              <h3>${service.name}</h3>
+              <p class="price">${service.price || 'Contact for pricing'}</p>
+              <p class="description">${service.description || ''}</p>
+            </div>
+          `).join('');
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error loading provider profile.");
+      }
+    }
+
+    document.getElementById("messageBtn").addEventListener("click", () => {
+      if (!auth.currentUser) {
+        window.location.href = "login.html";
+      } else {
+        window.location.href = `chat.html?providerId=${providerId}`;
+      }
+    });
+
+    loadProvider();
+  </script>
+
+  <style>
+    .profile-view-container {
+      padding: 100px 0 60px;
+      min-height: 100vh;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    .profile-view {
+      background: rgba(30, 30, 30, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(227, 6, 157, 0.1), transparent);
+    }
+
+    .profile-image {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      border-radius: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .verified-badge {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      background: var(--primary);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .verified-badge.hidden {
+      display: none;
+    }
+
+    .profile-meta {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .profile-meta h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 15px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .stat i {
+      color: var(--primary);
+    }
+
+    #messageBtn {
+      margin-top: 20px;
+      padding: 12px 25px;
+    }
+
+    .profile-content {
+      padding: 30px;
+    }
+
+    .profile-section {
+      margin-bottom: 30px;
+    }
+
+    .profile-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .profile-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .profile-section p {
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .service-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .service-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .service-card .price {
+      color: var(--primary);
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .service-card .description {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+      }
+
+      .profile-image {
+        width: 100%;
+        height: 300px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</body>
+</html>
